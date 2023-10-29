@@ -1,0 +1,26 @@
+{
+	"sourceFileA": [
+		"https://mynoise.world/Data/HUM60/0a.ogg",
+		"https://mynoise.world/Data/HUM60/1a.ogg",
+		"https://mynoise.world/Data/HUM60/2a.ogg",
+		"https://mynoise.world/Data/HUM60/3a.ogg",
+		"https://mynoise.world/Data/HUM60/4a.ogg",
+		"https://mynoise.world/Data/HUM60/5b.ogg",
+		"https://mynoise.world/Data/HUM60/6b.ogg",
+		"https://mynoise.world/Data/HUM60/7a.ogg",
+		"https://mynoise.world/Data/HUM60/8a.ogg",
+		"https://mynoise.world/Data/HUM60/9b.ogg"
+	],
+	"sourceFileB": [
+		"https://mynoise.world/Data/HUM60/0b.ogg",
+		"https://mynoise.world/Data/HUM60/1b.ogg",
+		"https://mynoise.world/Data/HUM60/2b.ogg",
+		"https://mynoise.world/Data/HUM60/3b.ogg",
+		"https://mynoise.world/Data/HUM60/4b.ogg",
+		"https://mynoise.world/Data/HUM60/5a.ogg",
+		"https://mynoise.world/Data/HUM60/6a.ogg",
+		"https://mynoise.world/Data/HUM60/7b.ogg",
+		"https://mynoise.world/Data/HUM60/8b.ogg",
+		"https://mynoise.world/Data/HUM60/9a.ogg"
+	]
+}

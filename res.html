@@ -464,8 +464,6 @@
 		var bANIMATE = 0; var bDISABLED = 0; var bMEDITATIONSESSION = 0;
 		var bFINISHEDLOADING = 0;
 		var bWEBAUDIO = 0;
-		var bSUPPORTOGG = 1;
-		var bSUPPORTMP3 = 0;
 		var bSUSPENDED = 0;
 		var bSTARTMUTED = 0;
 		var sSYNCHRO = "0123456789";
@@ -517,9 +515,7 @@
 		var URLlevels = ''; var URLanimate = ''; var URLmute = ''; var URLbell = ''; var URLtimer = ''; var URLdetune = ''; var URLmagic = ''; var URLtitle = ''; var URLanimateProfileLo = ''; var URLanimateProfileHigh = '';
 		var os;
 		var bDOWNLOADED = new Array(); iSTARTED = new Array(); iLOADED = new Array(); iTOTAL = new Array();
-		var totSizeMP3 = 3100777;
 		var totSizeOGG = 3136709;
-		var serverTotal = totSizeMP3;
 		var dlMonitorThrottle = -500;
 		var averageSliderLevel = 0.4;
 		var samplesArray;
@@ -568,7 +564,6 @@
 
 
 		function getQueryStringVars(urlHref) {
-
 			urlHref = urlHref || window.location.href;  // if empty, use URL
 			var vars = {};
 			var parts = urlHref.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
@@ -664,8 +659,10 @@
 		}
 
 		function nowPlaying() {
-			if (bCALIBRATE == 0) { msg("Now Playing..."); }
-			else { msg("1.&nbsp;Turn up your computer volume until you hear the static 2.&nbsp;Adjust each slider individually."); }
+			if (bCALIBRATE == 0)
+				msg("Now Playing...");
+			else
+				msg("1.&nbsp;Turn up your computer volume until you hear the static 2.&nbsp;Adjust each slider individually.");
 			enableButton(["reset", "anim", "volDown", "volUp", "mute", "fftCanvas", "timer", "bell", "calib", "play0", "play1", "play2", "play3", "play4", "play5", "play6", "play7", "play8", "play9"], 1);
 			if (bCALIBRATE == 0) {
 				document.getElementById("mute").style.display = "none";
@@ -679,7 +676,6 @@
 		}
 
 		function loadHTML5AudioSound(i) {
-
 			sourceA[i] = new Audio(sourceFileA[i]);
 			sourceB[i] = new Audio(sourceFileB[i]);
 
@@ -695,16 +691,6 @@
 				sourceB[i].loop = 0;
 			}
 
-			// Automatic Fallback
-			sourceA[i].addEventListener("error", function () {
-				var cdn = "https://mynoise.world";
-				if (sourceFileA[i].indexOf(cdn) > -1) {
-					sourceFileA[i] = sourceFileA[i].substring(cdn.length);
-					sourceFileB[i] = sourceFileB[i].substring(cdn.length);
-					loadHTML5AudioSound(i);
-				}
-			});
-
 			sourceA[i].addEventListener("canplaythrough", function () { countIn(i) });
 			sourceB[i].addEventListener("canplaythrough", function () { countIn(i + iNUMBERBANDS) });
 
@@ -715,25 +701,21 @@
 		}
 
 		function loadAllSounds() {
-			//------------------------------------------------------------------
 			if (bWEBAUDIO == 1) {
 
 				for (var i = 0; i < iNUMBERBANDS; ++i) loadWebAudioSound(sourceFileA[i], i);
 				for (var i = 0; i < iNUMBERBANDS; ++i) loadWebAudioSound(sourceFileB[i], i + iNUMBERBANDS);
 
 			}
-			//------------------------------------------------------------------
 			else {
 				for (var i = 0; i < iNUMBERBANDS; ++i) loadHTML5AudioSound(i);
 			}
 		}
 
 		function playAllSounds() {
-			//------------------------------------------------------------------
 			if (bWEBAUDIO == 1) {
 				for (var i = 0; i < iNUMBERBANDS; ++i) startWebAudio(i)
 			}
-			//------------------------------------------------------------------
 			else {
 				for (var i = 0; i < iNUMBERBANDS; ++i) {
 					sourceA[i].play();
@@ -743,7 +725,18 @@
 		}
 
 		function playOS(stem) {
-			var colorTable = ["100,50,0", "200,0,0", "255,128,0", "150,190,0", "0,200,0", "0,200,170", "0,140,220", "0,0,255", "140,0,170", "200,140,255"];
+			var colorTable = [
+				"100,50,0",
+				"200,0,0",
+				"255,128,0",
+				"150,190,0",
+				"0,200,0",
+				"0,200,170",
+				"0,140,220",
+				"0,0,255",
+				"140,0,170",
+				"200,140,255",
+			];
 			var duration = 0;
 			playbackFactor[stem] = pitchTable[Math.floor(Math.random() * pitchTable.length)]
 			if (lastPlayedOS[stem]) {
@@ -770,15 +763,32 @@
 			bPITCHRAN++;
 			if (bPITCHRAN == 7) bPITCHRAN = 0;
 			switch (bPITCHRAN) {
-				case 0: pitchTable = [1]; msg('<span class="lowlight">' + pitchTable.toString().replace(/,/g, ' ') + '</span>'); break;
-				case 1: pitchTable = [0.5]; msg('<span class="lowlight">' + pitchTable.toString().replace(/,/g, ' ') + '</span>'); break;
-				case 2: pitchTable = [2]; msg('<span class="lowlight">' + pitchTable.toString().replace(/,/g, ' ') + '</span>'); break;
-				case 3: pitchTable = [0.5, 1]; msg('<span class="lowlight">' + pitchTable.toString().replace(/,/g, ' ') + '</span>'); break;
-				case 4: pitchTable = [0.5, 1, 2]; msg('<span class="lowlight">' + pitchTable.toString().replace(/,/g, ' ') + '</span>'); break;
-				case 5: pitchTable = [0.5, 1, 1.5]; msg('<span class="lowlight">' + pitchTable.toString().replace(/,/g, ' ') + '</span>'); break;
-				case 6: pitchTable = [0.5, 1, 1.5, 2]; msg('<span class="lowlight">' + pitchTable.toString().replace(/,/g, ' ') + '</span>'); break;
-				case 7: pitchTable = [0.5, 0.75, 1, 1.5, 2]; msg('<span class="lowlight">' + pitchTable.toString().replace(/,/g, ' ') + '</span>'); break;
+				case 0:
+					pitchTable = [1];
+					break;
+				case 1:
+					pitchTable = [0.5];
+					break;
+				case 2:
+					pitchTable = [2];
+					break;
+				case 3:
+					pitchTable = [0.5, 1];
+					break;
+				case 4:
+					pitchTable = [0.5, 1, 2];
+					break;
+				case 5:
+					pitchTable = [0.5, 1, 1.5];
+					break;
+				case 6:
+					pitchTable = [0.5, 1, 1.5, 2];
+					break;
+				case 7:
+					pitchTable = [0.5, 0.75, 1, 1.5, 2];
+					break;
 			}
+			msg('<span class="lowlight">' + pitchTable.toString().replace(/,/g, ' ') + '</span>');
 		}
 
 		function experimentalOSauto() {
@@ -860,9 +870,7 @@
 		}
 
 		function webAudioPlayAAt(item, onContextTime) {
-
 			// console.log('A@ '+context.currentTime+' for '+onContextTime+' on stem '+item);
-
 			if (item == sSYNCHRO.indexOf(sSYNCHRO.charAt(item))) { // this is the first occurrence of the Sync group
 
 				nextB[item] += interval[item];
@@ -883,7 +891,7 @@
 					}
 				}
 			}
-			monitor();
+			monitorStemLoss();
 		}
 
 		function webAudioPlayBAt(item, onContextTime) {
@@ -910,7 +918,7 @@
 					}
 				}
 			}
-			monitor();
+			monitorStemLoss();
 		}
 
 		function playBell() {
@@ -945,51 +953,67 @@
 			var grandTotal = 0; var loaded = 0;
 
 			// restart if stalled
-			var timeOut = 10000; // 10s
-			if (((Date.now() - iSTARTED[index]) > timeOut) && (iLOADED[i] == report.loaded)) {
+			var timeout = 10000; // 10s
+			if (iLOADED[i] == report.loaded && (Date.now() - iSTARTED[index]) > timeout) {
 				// stalled
-				console.log(index + ' TIME OUT');
+				console.log(index + ' TIMEOUT');
 				initiator.abort();
 				loadWebAudioSound(url, index);
+
 			} else {
-				if (report.lengthComputable) { // myNoise Servers are supposed to return Content-Length, should be always true
+				if (report.lengthComputable) {
+					// myNoise Servers are supposed to return Content-Length, should be always true
 					iTOTAL[index] = report.total;
 					iLOADED[index] = report.loaded;
+
 					// compute grand total
 					for (var i = 0; i < 2 * iNUMBERBANDS; ++i) {
-						if (iTOTAL[i]) { grandTotal += iTOTAL[i]; loaded += iLOADED[i] }
+						if (!iTOTAL[i]) continue;
+						grandTotal += iTOTAL[i];
+						loaded += iLOADED[i];
 					}
 
-					if (grandTotal > serverTotal) serverTotal = grandTotal;
+					if (grandTotal > totSizeOGG)
+						totSizeOGG = grandTotal;
+
 					var loadedMB = Math.floor(loaded / 1048576);
 					var grandTotalMB = Math.floor(grandTotal / 1048576);
-					var serverTotalMB = Math.floor(serverTotal / 1048576);
-					var percent = Math.round(loaded / serverTotal * 100);
+					var totSizeOGGMB = Math.floor(totSizeOGG / 1048576);
+					var percent = Math.round(loaded / totSizeOGG * 100);
 
-					var str = "<span style='color:#EEE;'>";
-					for (var i = 0; i < loadedMB; ++i) str += "•";
-					str = str + "</span>" + percent + "% <span style='color:#777;'>";
-					for (var i = loadedMB; i < grandTotalMB; ++i) str += "•";
-					str += "</span><span style='color:#333;'>";
-					for (var i = grandTotalMB; i < serverTotalMB; ++i) str += "•";
-					str += "</span>";
+					var msgStr = [
+						"Loading <span style='color:#EEE;'>",
+						'•'.repeat(loadedMB),
+						`</span>${percent}% <span style='color:#777;'>`,
+						'•'.repeat(grandTotalMB),
+						"</span><span style='color:#333;'>",
+						'•'.repeat(totSizeOGGMB),
+						"</span>",
+					].join('');
 
-					if ((percent == 100) && (loaded < 100000)) msg('An error occurred (see javascript console for details)'); else msg('Loading ' + str);
+					if (loaded == totSizeOGG && loaded < 100000)
+						msg('An error occurred (see JavaScript console for details).');
+					else
+						msg(msgStr);
 				}
 			}
 		}
 
-		function monitor() {
+		function monitorStemLoss() {
 			var currentTime = context.currentTime;
-			var elapsed;
+			var elapsed = 0;
 			for (var i = 0; i < iNUMBERBANDS; ++i) {
-				if (interval[i] > 0) {
-					elapsed = Math.min(currentTime - lastPlayedA[i], currentTime - lastPlayedB[i]);
-					if (elapsed > (interval[i] * 1.01)) {
-						console.log('Stem ' + i + ' was lost. Now restarting.');
-						lastPlayedA[i] = currentTime; lastPlayedB[i] = currentTime;
-						restartWebAudio(i);
-					}
+				if (interval[i] <= 0) continue;
+
+				elapsed = Math.min(
+					currentTime - lastPlayedA[i],
+					currentTime - lastPlayedB[i],
+				);
+				if (elapsed > (interval[i] * 1.01)) {
+					console.log(`Stem ${i} was lost. Now restarting.`);
+					lastPlayedA[i] = currentTime;
+					lastPlayedB[i] = currentTime;
+					restartWebAudio(i);
 				}
 			}
 		}
@@ -1022,24 +1046,19 @@
 			bufferList = null; gainNodeA = null; gainNodeB = null; sourceA = null; sourceB = null;
 		}
 
-		// INIT
-
 		var launchCounter = 0;
-
 		function init() {
-
-			// if (!navigator.cookieEnabled) { window.location.href = "/showMessage.php?msgID=4"; }
-
-			var a = document.createElement('audio');
-
-			if (!!(a.canPlayType && a.canPlayType('audio/ogg; codecs="vorbis"').replace(/no/, ''))) { bSUPPORTOGG = 1; serverTotal = totSizeOGG; };
-			// if (!!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''))) { bSUPPORTMP3 = 1; };
-
-			if (typeof webkitAudioContext !== "undefined") { context = new webkitAudioContext(); bWEBAUDIO = 1; }
-			if (typeof AudioContext !== "undefined") { context = new AudioContext(); bWEBAUDIO = 1; }
+			var audio = document.createElement('audio');
+			if (typeof AudioContext !== "undefined") {
+				context = new AudioContext();
+				bWEBAUDIO = 1;
+			}
 
 			console.log(navigator.userAgent);
-			if (bWEBAUDIO) console.log('Web Audio [mynoise.world]'); else console.log('HTML5 Audio [mynoise.world]');
+			if (bWEBAUDIO)
+				console.log('Web Audio [mynoise.world]');
+			else
+				console.log('HTML5 Audio [mynoise.world]');
 
 			tmp = readCookie('LVL');
 			if (tmp != null) {
@@ -1057,7 +1076,7 @@
 			checkFavGen();
 			loadAllSounds();
 
-			setPreset(undefined, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3);
+			setPreset(undefined, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 			if (!bANIMATIONUSERPROFILESET) {
 				for (var i = 0; i < iNUMBERBANDS; ++i) {
 					animationProfileHigh[i] = Math.min(currentLevel[i] * 1.25, 0.99);
@@ -1763,7 +1782,6 @@
 		}
 
 		function emphasisEQ(factor) {
-
 			var tag = "CAL";
 			var calLevel;
 			var userData = {};
@@ -1774,9 +1792,7 @@
 
 
 			if (userData[tag] != null) {
-
 				masterGain.gain.value = 0;
-
 				var dB = new Array();
 				var totdB = 0;
 				var mindB = 999999;
